@@ -15,6 +15,7 @@ import os
 import logging
 import shutil
 from PIL import Image
+from functools import lru_cache
 
 # setup logging
 logging.basicConfig(level=logging.INFO)
@@ -54,13 +55,19 @@ def authenticate(api_key: str = Depends(api_key_header)):
 
 login(token=hf_token)
 
+# Cache model loading
+@lru_cache()
+def load_model():
+    from ultralytics import YOLO
+    model_path = hf_hub_download(repo_id="wahyunan/simple_structure_model_segmentation", filename="best.pt")
+    return YOLO(model_path)
 # Download model from Hugging face hub
 
-model_path = hf_hub_download(repo_id="wahyunan/simple_structure_model_segmentation",filename="best.pt")
+# model_path = hf_hub_download(repo_id="wahyunan/simple_structure_model_segmentation",filename="best.pt")
 
 # Load model YOLOv8 segmentation
 
-model = YOLO(model_path)
+# model = YOLO(model_path)
 
 # color for classes
 
@@ -95,6 +102,7 @@ async def predict(request:Request,file: UploadFile=File(...)):
         temp_filename = f"temp_{uuid.uuid4().hex}.jpg"
         with open(temp_filename, "wb") as buffer:
             shutil.copyfileobj(file.file, buffer)
+        model = load_model()
         results = model(temp_filename)[0]
         names = model.names
 
