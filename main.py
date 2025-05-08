@@ -25,7 +25,7 @@ logger = logging.getLogger(__name__)
 
 load_dotenv()
 hf_token = os.getenv("HF_TOKEN")
-api_key_header = APIKeyHeader(name = "X-API-KEY")
+# api_key_header = APIKeyHeader(name = "X-API-KEY")
 
 # Rate limiting setup
 limiter = Limiter(key_func=get_remote_address)
@@ -44,12 +44,12 @@ app.add_middleware(
 
 # handle preflight OPTIONS requests explicitly
 @app.options("/predict/")
-async def options_handler():
-    return Response(status_code=200)
+# async def options_handler():
+#     return Response(status_code=200)
 
-def authenticate(api_key: str = Depends(api_key_header)):
-    if api_key != os.getenv("API_KEY"):
-        raise HTTPException(status_code=401, detail="Unauthorized")
+# def authenticate(api_key: str = Depends(api_key_header)):
+#     if api_key != os.getenv("API_KEY"):
+#         raise HTTPException(status_code=401, detail="Unauthorized")
 
 # Login to hugging face
 
