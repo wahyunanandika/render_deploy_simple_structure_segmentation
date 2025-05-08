@@ -1,5 +1,5 @@
 from fastapi import FastAPI, UploadFile,File,HTTPException, Depends, Request
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, Response
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import APIKeyHeader
 from slowapi import Limiter
@@ -40,6 +40,11 @@ app.add_middleware(
     allow_methods=["*"],# Allow all HTTP methods
     allow_headers=["*"],# Allow all headers
 )
+
+# handle preflight OPTIONS requests explicitly
+@app.options("/predict/")
+async def options_handler():
+    return Response(status_code=200)
 
 def authenticate(api_key: str = Depends(api_key_header)):
     if api_key != os.getenv("API_KEY"):
