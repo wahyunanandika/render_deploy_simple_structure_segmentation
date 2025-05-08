@@ -1,0 +1,25 @@
+# Virtual Machine
+venv/
+
+# Python cache
+__pycache__/
+*.py[cod]
+
+# Model weights
+*.pt
+
+# Output
+output/
+
+# Env
+*.env
+
+# Ignore environment files
+*.env
+
+# Ignore temporary files (e.g., files created during image processing)
+temp_*.jpg
+
+# Ignore other possible temporary files you may create
+*.log
+*.tmp
