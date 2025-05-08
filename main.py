@@ -43,7 +43,7 @@ app.add_middleware(
 )
 
 # handle preflight OPTIONS requests explicitly
-@app.options("/predict/")
+# @app.options("/predict/")
 # async def options_handler():
 #     return Response(status_code=200)
 
