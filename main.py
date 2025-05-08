@@ -1,5 +1,6 @@
 from fastapi import FastAPI, UploadFile,File,HTTPException, Depends, Request
 from fastapi.responses import JSONResponse
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import APIKeyHeader
 from slowapi import Limiter
 from slowapi.util import get_remote_address
@@ -29,6 +30,16 @@ api_key_header = APIKeyHeader(name = "X-API-KEY")
 limiter = Limiter(key_func=get_remote_address)
 
 app = FastAPI()
+
+# CORS configuration (Allow requests from front end domain)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins = ["http://103.233.103.22:8080"],  # Frontend URL
+    allow_credentials=True,
+    allow_methods=["*"],# Allow all HTTP methods
+    allow_headers=["*"],# Allow all headers
+)
 
 def authenticate(api_key: str = Depends(api_key_header)):
     if api_key != os.getenv("API_KEY"):
